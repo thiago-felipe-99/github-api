@@ -1,12 +1,14 @@
 import { FormEvent } from "react";
+import { useUsersSetters } from "../contexts/Users";
 import useForm from "../hooks/useForm";
 
 export default function SearchUsers(): JSX.Element {
   const { form, handleChange, cleanForm } = useForm({ name: "" });
+  const { setSearch } = useUsersSetters();
 
   function submitForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log(form);
+    setSearch?.(form.name);
     cleanForm();
   }
 

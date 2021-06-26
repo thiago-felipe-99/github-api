@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 
-type Return<F = unknown> = {
+interface Return<F = unknown> {
   form: F,
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void,
   cleanForm: () => void
