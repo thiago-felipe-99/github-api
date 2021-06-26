@@ -13,7 +13,7 @@ export default function useSearchUser(search: string): ReturnUserSearchUser {
     data = [],
     refetch,
     error,
-    isLoading
+    isFetching
   } = useQuery(
     [ "users", search ],
     () => {
@@ -25,9 +25,9 @@ export default function useSearchUser(search: string): ReturnUserSearchUser {
   );
 
   return {
-    users: data,
+    users:     data,
     refetch,
-    isLoading,
+    isLoading: isFetching,
     error
   };
 }
