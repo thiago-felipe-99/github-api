@@ -20,7 +20,7 @@ function getOctokit(): Octokit  {
   return new Octokit({ auth: getToken() });
 }
 
-export async function searchUser(search: string)
+export function searchUser(search: string)
 : Promise<Endpoints["GET /search/users"]["response"]> {
   return getOctokit().request("GET /search/users", { q: search });
 }

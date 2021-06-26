@@ -6,31 +6,30 @@ import {
   useContext,
   useState
 } from "react";
-import { User } from "../api";
-import useSearchUser from "../hooks/useSearchUser";
+import useSearchUser, { ReturnUserSearchUser } from "../hooks/useSearchUser";
 
 interface Props {
   children: ReactNode
 }
 
 interface Context {
-  states: {
+  states: Pick<ReturnUserSearchUser, "users" | "error" | "isLoading"> & {
     search: string,
-    users: User[],
-    error?: unknown,
+
   },
-  getters?: {
-    getUsers: () => Promise<void>
+  refetch?: {
+    users: ReturnUserSearchUser["refetch"]
   },
   setters?: {
-    setSearch: Dispatch<SetStateAction<string>>
+    search: Dispatch<SetStateAction<string>>
   }
 }
 
 const defaultValue: Context = {
   states: {
-    search: "",
-    users:  []
+    search:    "",
+    isLoading: false,
+    users:     []
   }
 };
 
@@ -38,23 +37,26 @@ const Context = createContext<Context>(defaultValue);
 
 export default function UsersContext(props: Props): JSX.Element {
   const [ search, setSearch ] = useState("");
-  const { users, error, getUsers } = useSearchUser(search);
+  const {
+    users, error, refetch: refetchUsers, isLoading
+  } = useSearchUser(search);
 
-  const states = {
+  const states: Context["states"] = {
     search,
     users,
+    isLoading,
     error
   };
 
-  const getters = { getUsers };
+  const refetch: Context["refetch"] = { users: refetchUsers };
 
-  const setters = { setSearch };
+  const setters: Context["setters"] = { search: setSearch };
 
   return (
     <Context.Provider
       value={{
         states,
-        getters,
+        refetch,
         setters
       }}
     >
@@ -71,8 +73,8 @@ export function useUsersStates(): Context["states"] {
   return useUsers().states;
 }
 
-export function useUsersGetters(): Context["getters"] {
-  return useUsers().getters;
+export function useUsersGetters(): Context["setters"] {
+  return useUsers().setters;
 }
 
 export function useUsersSetters(): Context["setters"] {

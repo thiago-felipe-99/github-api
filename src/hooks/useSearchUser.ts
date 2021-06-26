@@ -1,33 +1,33 @@
-import { useCallback, useEffect, useState } from "react";
+import { QueryObserverResult, useQuery } from "react-query";
 import { searchUser, User } from "../api";
 
-interface Return {
+export interface ReturnUserSearchUser {
   users: User[],
-  getUsers: ()=> Promise<void>,
-  error: unknown
+  refetch: ()=> Promise<QueryObserverResult<User[]>>,
+  isLoading: boolean,
+  error?: unknown
 }
 
-export default function useSearchUser(search: string): Return {
-  const [ users, setUsers ] = useState<User[]>([]);
-  const [ error, setError ] = useState<unknown>();
+export default function useSearchUser(search: string): ReturnUserSearchUser {
+  const {
+    data = [],
+    refetch,
+    error,
+    isLoading
+  } = useQuery(
+    [ "users", search ],
+    () => {
+      if (!search)
+        return [];
 
-  const getUsers = useCallback(async () => {
-    if (!search)
-      return;
-
-    try {
-      const response = await searchUser(search);
-      setUsers(response.data.items);
-    } catch (error) {
-      setError(error);
+      return searchUser(search).then((response) => response.data.items);
     }
-  }, [ search ]);
-
-  useEffect(() => { getUsers(); }, [ getUsers ]);
+  );
 
   return {
-    users,
-    getUsers,
+    users: data,
+    refetch,
+    isLoading,
     error
   };
 }
