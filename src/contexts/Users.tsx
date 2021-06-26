@@ -6,6 +6,7 @@ import {
   useContext,
   useState
 } from "react";
+import { User } from "../api";
 import useSearchUser from "../hooks/useSearchUser";
 
 interface Props {
@@ -14,7 +15,9 @@ interface Props {
 
 interface Context {
   states: {
-    search: string
+    search: string,
+    users: User[],
+    error?: unknown,
   },
   getters?: {
     getUsers: () => Promise<void>
@@ -24,7 +27,12 @@ interface Context {
   }
 }
 
-const defaultValue: Context = { states: { search: "" } };
+const defaultValue: Context = {
+  states: {
+    search: "",
+    users:  []
+  }
+};
 
 const Context = createContext<Context>(defaultValue);
 

@@ -2,7 +2,9 @@ import { Octokit } from "@octokit/core";
 import { Endpoints } from "@octokit/types";
 import axios from "axios";
 
-export type User = Endpoints["GET /user"]["response"]["data"];
+export type User =
+  Exclude<Endpoints["GET /search/users"]["response"]["data"]["items"][number], null>;
+export type UserInfo = Endpoints["GET /users/{username}"]["response"]["data"]
 
 export async function setToken(code: string): Promise<void> {
   const body = { code };
