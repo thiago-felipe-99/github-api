@@ -22,7 +22,9 @@ export default function Repos(props: Props): JSX.Element {
 
   return (
     <section>
-      {isLoading && <p>Carregando reposítórios</p>}
+      {isLoading
+        ? <p>Carregando reposítórios</p>
+        : !repos.length && <p>Nenhum Repositório Encontrado</p>}
       {repos.map((repo) => <Repo key={repo.id} repo={repo}/>)}
     </section>
   );

@@ -33,7 +33,7 @@ export default function Repo(props: Props): JSX.Element {
       </div>
       <p>{`Arquivado: ${archived ? "Sim" : "Não"}`}</p>
       <p>{`Desativado: ${disabled ? "Sim" : "Não"}`}</p>
-      <a href={homepage || ""}>
+      <a href={homepage || ""} target="_blank" rel="noreferrer">
         <button disabled={!homepage}>Página</button>
       </a>
       <p>{`É Um fork: ${fork ? "sim" : "não"}`}</p>

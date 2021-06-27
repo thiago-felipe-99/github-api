@@ -9,7 +9,7 @@ export default function Token(): JSX.Element {
   useEffect(() => {
     if (code)
       setToken(code as string)
-        .then(() => route.push("/users"))
+        .then(() => route.push("/user"))
         .catch(() => {
           alert("Não Foi Possível Fazer Login, Irémos Voltar Para A Página Inicial");
           route.push("/");

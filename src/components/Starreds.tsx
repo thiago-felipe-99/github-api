@@ -22,7 +22,9 @@ export default function Starreds(props: Props): JSX.Element {
 
   return (
     <section>
-      {isLoading && <p>Carregando reposítórios</p>}
+      {isLoading
+        ? <p>Carregando reposítórios</p>
+        : !starreds.length && <p>Nenhum Repositório foi Favoritado</p>}
       {starreds.map((repo) => <Repo key={repo.id} repo={repo}/>)}
     </section>
   );

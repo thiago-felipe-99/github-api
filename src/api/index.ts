@@ -26,6 +26,14 @@ function getOctokit(): Octokit  {
   return new Octokit({ auth: getToken() });
 }
 
+export function userInfo(username?: string)
+: Promise<Endpoints["GET /users/{username}"]["response"]> {
+  if (!username)
+    return getOctokit().request("GET /user");
+
+  return getOctokit().request("GET /users/{username}", { username });
+}
+
 export function searchUser(search: string)
 : Promise<Endpoints["GET /search/users"]["response"]> {
   return getOctokit().request("GET /search/users", { q: search });
@@ -43,3 +51,4 @@ export function userStarreds(username: string)
 : Promise<Endpoints["GET /users/{username}/starred"]["response"]> {
   return getOctokit().request("GET /users/{username}/starred", { username });
 }
+
