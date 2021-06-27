@@ -7,13 +7,16 @@ export default function Token(): JSX.Element {
   const { code } = route.query;
 
   useEffect(() => {
-    if (code)
-      setToken(code as string)
-        .then(() => route.push("/user"))
-        .catch(() => {
-          alert("Não Foi Possível Fazer Login, Irémos Voltar Para A Página Inicial");
-          route.push("/");
-        });
+    if (!code)
+      return;
+
+    try {
+      setToken(code as string);
+      route.push("/");
+    } catch {
+      alert("Não Foi Possível Fazer Login, Irémos Voltar Para A Página De Login");
+      route.push("/login");
+    }
   }, [ code, route ]);
 
   return (

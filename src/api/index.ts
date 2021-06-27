@@ -22,6 +22,10 @@ export function getToken(): string {
   return localStorage.getItem("token") || "";
 }
 
+export function removeToken(): void {
+  localStorage.setItem("token", "");
+}
+
 function getOctokit(): Octokit  {
   return new Octokit({ auth: getToken() });
 }
