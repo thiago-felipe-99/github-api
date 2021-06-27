@@ -17,7 +17,11 @@ export default function User(props: Props) : JSX.Element {
             <button>Repositórios</button>
           </a>
         </Link>
-        <button>Starred</button>
+        <Link href={`/starreds/${login}`}>
+          <a>
+            <button>Estrelas</button>
+          </a>
+        </Link>
       </div>
     </article>
   );

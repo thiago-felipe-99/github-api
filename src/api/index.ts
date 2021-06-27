@@ -4,9 +4,13 @@ import axios from "axios";
 
 export type User =
   Exclude<Endpoints["GET /search/users"]["response"]["data"]["items"][number], null>;
-export type UserInfo = Endpoints["GET /users/{username}"]["response"]["data"]
+
+export type UserInfo = Endpoints["GET /users/{username}"]["response"]["data"];
+
 export type Repo =
-  Endpoints["GET /users/{username}/repos"]["response"]["data"][number]
+  Endpoints["GET /users/{username}/repos"]["response"]["data"][number];
+
+export type Starred = Repo;
 
 export async function setToken(code: string): Promise<void> {
   const body = { code };
@@ -33,4 +37,9 @@ export function userRepos(username: string)
     username,
     type: "all"
   });
+}
+
+export function userStarreds(username: string)
+: Promise<Endpoints["GET /users/{username}/starred"]["response"]> {
+  return getOctokit().request("GET /users/{username}/starred", { username });
 }

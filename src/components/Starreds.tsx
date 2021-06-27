@@ -1,10 +1,10 @@
-import useUserRepos from "../hooks/useUserRepos";
+import useUserStarreds from "../hooks/useUserStarreds";
 import Repo from "./Repo";
 
 interface Props { username: string }
 
-export default function Repos(props: Props): JSX.Element {
-  const { repos, error, isLoading } = useUserRepos(props.username);
+export default function Starreds(props: Props): JSX.Element {
+  const { starreds, error, isLoading } = useUserStarreds(props.username);
 
   if (error?.response?.data?.message === "Not Found")
     return (
@@ -23,7 +23,8 @@ export default function Repos(props: Props): JSX.Element {
   return (
     <section>
       {isLoading && <p>Carregando reposítórios</p>}
-      {repos.map((repo) => <Repo key={repo.id} repo={repo}/>)}
+      {starreds.map((repo) => <Repo key={repo.id} repo={repo}/>)}
     </section>
   );
 }
+
