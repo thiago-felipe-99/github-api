@@ -6,19 +6,19 @@ import {
   useContext,
   useState
 } from "react";
-import useSearchUser, { ReturnUserSearchUser } from "../hooks/useSearchUser";
+import useSearchUser, { ReturnUseSearchUser } from "../hooks/useSearchUser";
 
 interface Props {
   children: ReactNode
 }
 
 interface Context {
-  states: Pick<ReturnUserSearchUser, "users" | "error" | "isLoading"> & {
+  states: Pick<ReturnUseSearchUser, "users" | "error" | "isLoading"> & {
     search: string,
 
   },
   refetch?: {
-    users: ReturnUserSearchUser["refetch"]
+    users: ReturnUseSearchUser["refetch"]
   },
   setters?: {
     search: Dispatch<SetStateAction<string>>

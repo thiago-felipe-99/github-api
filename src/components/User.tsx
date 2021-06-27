@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { User as UserInterface } from "../api";
 
 interface Props {
@@ -11,7 +12,11 @@ export default function User(props: Props) : JSX.Element {
       <img src={avatar} alt={login}/>
       <h3>{login}</h3>
       <div>
-        <button>Repositórios</button>
+        <Link href={`/repos/${login}`}>
+          <a>
+            <button>Repositórios</button>
+          </a>
+        </Link>
         <button>Starred</button>
       </div>
     </article>

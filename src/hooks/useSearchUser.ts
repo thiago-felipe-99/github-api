@@ -1,14 +1,14 @@
 import { QueryObserverResult, useQuery } from "react-query";
 import { searchUser, User } from "../api";
 
-export interface ReturnUserSearchUser {
+export interface ReturnUseSearchUser {
   users: User[],
   refetch: ()=> Promise<QueryObserverResult<User[]>>,
   isLoading: boolean,
   error?: unknown
 }
 
-export default function useSearchUser(search: string): ReturnUserSearchUser {
+export default function useSearchUser(search: string): ReturnUseSearchUser {
   const {
     data = [],
     refetch,

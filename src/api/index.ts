@@ -5,6 +5,8 @@ import axios from "axios";
 export type User =
   Exclude<Endpoints["GET /search/users"]["response"]["data"]["items"][number], null>;
 export type UserInfo = Endpoints["GET /users/{username}"]["response"]["data"]
+export type Repo =
+  Endpoints["GET /users/{username}/repos"]["response"]["data"][number]
 
 export async function setToken(code: string): Promise<void> {
   const body = { code };
@@ -23,4 +25,12 @@ function getOctokit(): Octokit  {
 export function searchUser(search: string)
 : Promise<Endpoints["GET /search/users"]["response"]> {
   return getOctokit().request("GET /search/users", { q: search });
+}
+
+export function userRepos(username: string)
+: Promise<Endpoints["GET /users/{username}/repos"]["response"]> {
+  return getOctokit().request("GET /users/{username}/repos", {
+    username,
+    type: "all"
+  });
 }
