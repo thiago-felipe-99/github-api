@@ -1,5 +1,5 @@
 import { QueryObserverResult, useQuery } from "react-query";
-import { Repo, userRepos } from "../api";
+import useApi, { Repo } from "./useApi";
 
 interface Return {
   repos: Repo[],
@@ -9,6 +9,7 @@ interface Return {
 }
 
 export default function useUserRepos(username: string): Return {
+  const { userRepos } = useApi();
   const {
     data = [],
     refetch,

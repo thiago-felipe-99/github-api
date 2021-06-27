@@ -18,7 +18,7 @@ export default function UserInfo(props: Props): JSX.Element {
   if (error)
     return (
       <section>
-        Não Foi Possível Pegar Os Reposotórios
+        Não Foi Possível Mostrar O Usuário
       </section>
     );
 

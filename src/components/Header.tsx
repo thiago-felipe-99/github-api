@@ -1,6 +1,5 @@
-import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
-import { removeToken } from "../api";
+import { session, signOut, useSession } from "next-auth/client";
 
 interface Props {
   search?: { show: boolean, text?: string },
@@ -31,12 +30,6 @@ export default function Header(props: Props): JSX.Element {
     search = { show: true },
     logout = { show: true }
   } = props;
-  const history = useRouter();
-
-  function logoutUser() {
-    removeToken();
-    history.push("/login");
-  }
 
   return (
     <header>
@@ -60,7 +53,7 @@ export default function Header(props: Props): JSX.Element {
         </Link>
       )}
       {logout.show && (
-        <button onClick={() => logoutUser()}>
+        <button onClick={() => signOut({ callbackUrl: "/" })}>
           {logout.text || "Sair"}
         </button>
       )}

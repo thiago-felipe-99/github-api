@@ -1,5 +1,5 @@
 import { QueryObserverResult, useQuery } from "react-query";
-import { UserInfo, userInfo } from "../api";
+import useApi, { UserInfo } from "./useApi";
 
 interface Return {
   userInfo: UserInfo,
@@ -8,7 +8,8 @@ interface Return {
   error?: any /*eslint-disable-line @typescript-eslint/no-explicit-any*/
 }
 
-export default function useUserInfo(username?: string): Return {
+export default function useUserInfo(username = ""): Return {
+  const { userInfo } = useApi();
   const {
     data = {},
     refetch,

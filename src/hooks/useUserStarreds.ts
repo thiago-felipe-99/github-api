@@ -1,5 +1,5 @@
 import { QueryObserverResult, useQuery } from "react-query";
-import { Starred, userStarreds } from "../api";
+import useApi, { Starred } from "./useApi";
 
 interface Return {
   starreds: Starred[],
@@ -9,6 +9,7 @@ interface Return {
 }
 
 export default function useUserStarreds(username: string): Return {
+  const { userStarreds } = useApi();
   const {
     data,
     refetch,

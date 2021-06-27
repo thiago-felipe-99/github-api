@@ -1,5 +1,5 @@
 import { QueryObserverResult, useQuery } from "react-query";
-import { searchUser, User } from "../api";
+import useApi, { User } from "./useApi";
 
 export interface ReturnUseSearchUser {
   users: User[],
@@ -9,6 +9,7 @@ export interface ReturnUseSearchUser {
 }
 
 export default function useSearchUser(search: string): ReturnUseSearchUser {
+  const { searchUser } = useApi();
   const {
     data = [],
     refetch,
