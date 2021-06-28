@@ -1,9 +1,11 @@
-import { QueryObserverResult, useQuery } from "react-query";
-import useApi, { Repo } from "./useApi";
+import { QueryObserverResult, useInfiniteQuery, InfiniteData } from "react-query";
+import useApi, { RepoResponse } from "./useApi";
 
 interface Return {
-  repos: Repo[],
-  refetch: ()=> Promise<QueryObserverResult<Repo[]>>,
+  repos: RepoResponse["data"],
+  fetchNextPage:
+    () => Promise<QueryObserverResult<InfiniteData<RepoResponse|null>>>,
+  hasNextPage?: boolean,
   isLoading: boolean,
   error?: any /*eslint-disable-line @typescript-eslint/no-explicit-any*/
 }
@@ -11,23 +13,33 @@ interface Return {
 export default function useUserRepos(username: string): Return {
   const { userRepos } = useApi();
   const {
-    data = [],
-    refetch,
+    data,
+    fetchNextPage,
+    hasNextPage,
     error,
     isFetching
-  } = useQuery(
+  } = useInfiniteQuery(
     [ "repos", username ],
-    () => {
+    ({ pageParam }) => {
       if (!username)
-        return [];
+        return null;
 
-      return userRepos(username).then((response) => response.data);
+      return userRepos(username, pageParam).then((response) => response);
+    },
+    {
+      getNextPageParam(last, all) {
+        if (!last?.headers.link?.includes("rel=\"next\""))
+          return false;
+
+        return all.length + 1;
+      }
     }
   );
 
   return {
-    repos:     data,
-    refetch,
+    repos:     data?.pages.flatMap((page) => page?.data || []) || [],
+    fetchNextPage,
+    hasNextPage,
     isLoading: isFetching,
     error
   };

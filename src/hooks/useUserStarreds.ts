@@ -1,9 +1,11 @@
-import { QueryObserverResult, useQuery } from "react-query";
-import useApi, { Starred } from "./useApi";
+import { InfiniteData, QueryObserverResult, useInfiniteQuery } from "react-query";
+import useApi, { RepoResponse, StarredResponse } from "./useApi";
 
 interface Return {
-  starreds: Starred[],
-  refetch: ()=> Promise<QueryObserverResult<Starred[]>>,
+  starreds: RepoResponse["data"],
+  fetchNextPage:
+    () => Promise<QueryObserverResult<InfiniteData<StarredResponse|null>>>,
+  hasNextPage?: boolean,
   isLoading: boolean,
   error?: any /*eslint-disable-line @typescript-eslint/no-explicit-any*/
 }
@@ -12,22 +14,33 @@ export default function useUserStarreds(username: string): Return {
   const { userStarreds } = useApi();
   const {
     data,
-    refetch,
+    fetchNextPage,
+    hasNextPage,
     error,
     isFetching
-  } = useQuery(
+  } = useInfiniteQuery(
     [ "starreds", username ],
-    async () => {
+    async ({ pageParam }) => {
       if (!username)
-        return [];
+        return null;
 
-      return userStarreds(username).then((response) => response.data);
+      return userStarreds(username, pageParam).then((response) => response);
+    },
+    {
+      getNextPageParam(last, all) {
+        if (!last?.headers.link?.includes("rel=\"next\""))
+          return false;
+
+        return all.length + 1;
+      }
     }
   );
 
   return {
-    starreds:  (data || []) as Starred[],
-    refetch:   refetch as ()=> Promise<QueryObserverResult<Starred[]>>,
+    starreds: data?.pages
+      .flatMap((page) => page?.data || []) as RepoResponse["data"] || [],
+    fetchNextPage,
+    hasNextPage,
     isLoading: isFetching,
     error
   };

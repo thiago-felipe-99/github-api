@@ -1,34 +1,46 @@
-import { QueryObserverResult, useQuery } from "react-query";
-import useApi, { User } from "./useApi";
+import { InfiniteData, QueryObserverResult, useInfiniteQuery } from "react-query";
+import useApi, { UserResponse } from "./useApi";
 
 export interface ReturnUseSearchUser {
-  users: User[],
-  refetch: ()=> Promise<QueryObserverResult<User[]>>,
+  users: UserResponse["data"]["items"],
   isLoading: boolean,
+  fetchNextPage:
+    () => Promise<QueryObserverResult<InfiniteData<UserResponse|null>>>,
+  hasNextPage?: boolean,
   error?: unknown
 }
 
 export default function useSearchUser(search: string): ReturnUseSearchUser {
   const { searchUser } = useApi();
   const {
-    data = [],
-    refetch,
+    data,
     error,
-    isFetching
-  } = useQuery(
+    isFetching,
+    fetchNextPage,
+    hasNextPage
+  } = useInfiniteQuery(
     [ "users", search ],
-    () => {
+    ({ pageParam }) => {
       if (!search)
-        return [];
+        return null;
 
-      return searchUser(search).then((response) => response.data.items);
+      return searchUser(search, pageParam).then((response) => response);
+    },
+    {
+      getNextPageParam(last, all) {
+        if (!last?.headers.link?.includes("rel=\"next\""))
+          return false;
+
+        return all.length + 1;
+      }
     }
   );
 
   return {
-    users:     data,
-    refetch,
+    users:     data?.pages.flatMap((page) => page?.data.items || []) || [],
     isLoading: isFetching,
+    fetchNextPage,
+    hasNextPage,
     error
   };
 }

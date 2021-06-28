@@ -13,12 +13,11 @@ interface Props {
 }
 
 interface Context {
-  states: Pick<ReturnUseSearchUser, "users" | "error" | "isLoading"> & {
+  states: Omit<ReturnUseSearchUser, "refetch" | "fetchNextPage"> & {
     search: string,
-
   },
-  refetch?: {
-    users: ReturnUseSearchUser["refetch"]
+  fetchers?: {
+    fetchNextUsers: ReturnUseSearchUser["fetchNextPage"],
   },
   setters?: {
     search: Dispatch<SetStateAction<string>>
@@ -38,17 +37,18 @@ const Context = createContext<Context>(defaultValue);
 export default function UsersContext(props: Props): JSX.Element {
   const [ search, setSearch ] = useState("");
   const {
-    users, error, refetch: refetchUsers, isLoading
+    users, error, isLoading, hasNextPage, fetchNextPage: fetchNextUsers
   } = useSearchUser(search);
 
   const states: Context["states"] = {
     search,
     users,
     isLoading,
+    hasNextPage,
     error
   };
 
-  const refetch: Context["refetch"] = { users: refetchUsers };
+  const fetchers: Context["fetchers"] = { fetchNextUsers };
 
   const setters: Context["setters"] = { search: setSearch };
 
@@ -56,7 +56,7 @@ export default function UsersContext(props: Props): JSX.Element {
     <Context.Provider
       value={{
         states,
-        refetch,
+        fetchers,
         setters
       }}
     >
@@ -73,8 +73,8 @@ export function useUsersStates(): Context["states"] {
   return useUsers().states;
 }
 
-export function useUsersGetters(): Context["setters"] {
-  return useUsers().setters;
+export function useUsersFetchers(): Context["fetchers"] {
+  return useUsers().fetchers;
 }
 
 export function useUsersSetters(): Context["setters"] {
