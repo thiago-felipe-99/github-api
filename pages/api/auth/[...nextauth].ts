@@ -4,7 +4,7 @@ import Providers from "next-auth/providers";
 export default NextAuth({
   providers: [
     Providers.GitHub({
-      clientId:     process.env.NEXT_PUBLIC_CLIENT_ID,
+      clientId:     process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
       scope:        "repo:status,read:user,user:email",
       profile(profile, token) {
