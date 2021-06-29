@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { UserInfo } from "../api";
+import { UserInfo } from "../hooks/useApi";
 
 interface Props {
   user: UserInfo

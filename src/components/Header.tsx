@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { session, signOut, useSession } from "next-auth/client";
+import { signOut } from "next-auth/client";
 
 interface Props {
   search?: { show: boolean, text?: string },

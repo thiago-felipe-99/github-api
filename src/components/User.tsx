@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { User as UserInterface } from "../api";
+import { UserResponse } from "../hooks/useApi";
 
 interface Props {
-  user: UserInterface
+  user: UserResponse["data"]["items"][number]
 }
 
 export default function User(props: Props) : JSX.Element {

@@ -1,6 +1,6 @@
-import { Repo as RepoInterface } from "../api";
+import { RepoResponse } from "../hooks/useApi";
 
-interface Props { repo: RepoInterface }
+interface Props { repo: RepoResponse["data"][number] }
 
 export default function Repo(props: Props): JSX.Element {
   const {
